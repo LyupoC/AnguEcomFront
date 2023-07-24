@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { map } from 'rxjs/internal/operators/map';
@@ -10,10 +10,15 @@ import { ProductCategory } from '../common/product-category';
 })
 export class ProductService {
 
-  private baseUrl = 'https://backend-web-service-ecom.onrender.com/products';
-  private categoryUrl = 'https://backend-web-service-ecom.onrender.com/product-category';
+  private baseUrl = 'http://localhost:8080/products';
+  private categoryUrl = 'http://localhost:8080/product-category';
 
-  constructor(private httpClient: HttpClient) { }
+  private headers = new HttpHeaders()
+    .set('Access-Control-Allow-Origin', '*')
+  constructor(private httpClient: HttpClient) {
+
+    
+  }
 
 
 
@@ -21,11 +26,13 @@ export class ProductService {
   getProduct(theProductId: number): Observable<Product> {
     const productUrl = `${this.baseUrl}/${theProductId}`;
 
-    return this.httpClient.get<Product>(productUrl);
+    return this.httpClient.get<Product>(productUrl, { headers: this.headers } );
   }
 
   getProductCategoryList(): Observable<ProductCategory[]> {
-    return this.httpClient.get<GetResponseProductCategory>(this.categoryUrl).pipe(
+    
+    const options = { headers: this.headers };
+    return this.httpClient.get<GetResponseProductCategory>(this.categoryUrl, {headers: this.headers}).pipe(
       map(response => response._embedded.productCategory)
     );
   }
@@ -43,7 +50,7 @@ export class ProductService {
   }
 
   searchProducts(searchUrl: string): Observable<Product[]> {
-    return this.httpClient.get<GetResponse>(searchUrl).pipe(
+    return this.httpClient.get<GetResponse>(searchUrl, { headers: this.headers }).pipe(
       map(response => response._embedded.products)
     );
   }
@@ -60,7 +67,7 @@ export class ProductService {
 
   getProductsPaginate(page:number, pageSize:number, categoryId: number) : Observable<GetResponseProducts>{
      const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${categoryId}&page=${page}&size=${pageSize}`;
-     return this.httpClient.get<GetResponseProducts>(searchUrl);
+    return this.httpClient.get<GetResponseProducts>(searchUrl, { headers: this.headers });
    }
 }
 

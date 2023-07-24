@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Routes, RouterModule } from '@angular/router';
 import { CategoryListComponent } from './components/category-list/category-list.component';
 import { SearchComponent } from './components/search/search.component';
@@ -28,11 +28,21 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ModalLoadingComponent } from './others/modal-loading/modal-loading.component';
 
 
+
+// Import the module from the SDK
+import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
+import { LoginComponent } from './components/login/login.component';
+import { OAuthModule } from 'angular-oauth2-oidc';
+import { AuthInterceptorInterceptor } from './interceptors/auth-interceptor.interceptor';
+import { LoginCallbackComponent } from './components/login-callback/login-callback.component';
+
+
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'cart-details', component: CartDetailsComponent },
   { path: 'search/:keyword', component: ProductListComponent },
+  { path: 'callback' , component: LoginCallbackComponent},
   { path: 'category/:id', component: ProductListComponent },
   { path: 'category', component: ProductListComponent },
   { path: 'products', component: ProductListComponent },
@@ -57,9 +67,20 @@ const routes: Routes = [
     HomeComponent,
     ProductDetailComponent,
     ModalOrderTrackingNumberComponent,
-    ModalLoadingComponent ],
+    ModalLoadingComponent,
+    LoginComponent,
+    LoginCallbackComponent ],
   imports: [
     BrowserModule,
+
+    OAuthModule.forRoot(),
+    AuthModule.forRoot({
+      domain: 'dev-iwm1hr4ywzqlodpw.us.auth0.com',
+      clientId: 'EEhKnXxSMBYDLCjwlfOl33wRDxSGwecD',
+      authorizationParams: {
+        redirect_uri: window.location.origin
+      }
+    }),
     HttpClientModule,
     RouterModule.forRoot(routes),
     ReactiveFormsModule,
@@ -69,7 +90,7 @@ const routes: Routes = [
 
   ],
 
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
