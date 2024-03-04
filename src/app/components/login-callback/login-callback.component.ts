@@ -22,6 +22,8 @@ export class LoginCallbackComponent implements OnInit {
       if (event instanceof OAuthEvent && event.type === 'token_received') {
         this.token = this.auth.getAccessToken();
         console.log("token:", this.token);
+
+        console.log(this.auth.getIdentityClaims()['given_name']);
       }
     });
   }

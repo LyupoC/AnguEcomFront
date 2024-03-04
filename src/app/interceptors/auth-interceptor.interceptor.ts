@@ -19,6 +19,7 @@ export class AuthInterceptorInterceptor implements HttpInterceptor {
     if (this.oauthService.hasValidAccessToken()) {
   
       const accessToken = this.oauthService.getAccessToken();
+
       console.log(accessToken);
       const authReq = request.clone({
         setHeaders: {

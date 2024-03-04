@@ -9,6 +9,7 @@ export const authCodeFlowConfig: AuthConfig = {
   redirectUri: window.location.origin + '/callback',
   clientId: 'EEhKnXxSMBYDLCjwlfOl33wRDxSGwecD',
   responseType: 'token id_token',
+  logoutUrl: window.location.origin,
   scope: 'openid profile email read:profile',
   showDebugInformation: true,
   skipIssuerCheck: true,
@@ -16,7 +17,7 @@ export const authCodeFlowConfig: AuthConfig = {
   useSilentRefresh: true,
   customQueryParams: {
     audience: 'http://localhost:8080',
-
+    max_age:0
   },
 };
 
@@ -51,5 +52,9 @@ export class AuthService {
   handleLoginCallback() {
     
 
+  }
+
+  isUserLoggedIn() {
+    return this.oauth.getIdentityClaims() !== null;
   }
 }

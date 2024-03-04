@@ -20,9 +20,6 @@ export class ProductService {
     
   }
 
-
-
-
   getProduct(theProductId: number): Observable<Product> {
     const productUrl = `${this.baseUrl}/${theProductId}`;
 

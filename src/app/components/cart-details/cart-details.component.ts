@@ -15,7 +15,6 @@ export class CartDetailsComponent implements OnInit {
   totalQuantity: number = 0;
 
   totalPrice: number = 0;
-
   shipping: number = 10;
 
 
