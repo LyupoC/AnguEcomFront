@@ -10,7 +10,6 @@ export class CustomFormValidators {
       return { "notOnlyWhiteSpace": true };
     }
 
-
     return {  };
 
   }

@@ -1,0 +1,3 @@
+<a *ngIf="!isUserLoggedIn()" routerLink="null" class="btn border" (click)="login()" ><i class="fas fa-user text-dark"></i> Login</a>
+
+<a *ngIf="isUserLoggedIn()"  routerLink="null" class="btn border"  href="javascript:void(null);" (click)="logout()"><i class="fas fa-user text-dark"></i> Log Out</a>
